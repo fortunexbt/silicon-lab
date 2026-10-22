@@ -1,0 +1,12 @@
+### START 2026-10-19T16:36:33 power=AC_Power batt=100% load=2.23 memfree=25% swap=4282.88M top=ControlCenter :: # ===== Cyber-Tiel production server (:8080, MTP depth 2, --temp 0): speed + task evals =====
+### END 2026-10-19T16:36:33 exit=0
+### START 2026-10-19T16:36:33 power=AC_Power batt=100% load=2.23 memfree=25% swap=4282.88M top=ControlCenter :: .venv/bin/python bench_server.py --url http://127.0.0.1:8080/v1 --model cyber-tiel-35b --temp 0 --tag cyber_tiel_depth2
+{"tag": "cyber_tiel_depth2", "prompt": "code", "ttft_s": 0.32, "decode_tps": 43.97, "n": 384}
+{"tag": "cyber_tiel_depth2", "prompt": "math", "ttft_s": 0.35, "decode_tps": 42.13, "n": 355}
+{"tag": "cyber_tiel_depth2", "prompt": "prose", "ttft_s": 0.34, "decode_tps": 24.18, "n": 384}
+{"tag": "cyber_tiel_depth2", "prompt": "explain", "ttft_s": 0.33, "decode_tps": 33.95, "n": 384}
+{"tag": "cyber_tiel_depth2", "prompt": "codecont", "ttft_s": 0.66, "decode_tps": 46.21, "n": 384}
+SUMMARY {"tag": "cyber_tiel_depth2", "median_decode_tps": 42.13, "mean_decode_tps": 38.09, "median_ttft_s": 0.34}
+### END 2026-10-19T16:37:28 exit=0
+### START 2026-10-19T16:37:28 power=AC_Power batt=99% load=1.29 memfree=7% swap=6153.44M top=MTLCompilerService :: .venv/bin/python eval_tasks.py --url http://127.0.0.1:8080/v1 --model cyber-tiel-35b --tag cyber_tiel_depth2
+TASKS {"tag": "cyber_tiel_depth2", "tool_call_acc": 1.0, "humaneval40_pass1": 0.95, "elapsed_s": 173}
