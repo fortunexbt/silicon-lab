@@ -1,0 +1,36 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "silicon-lab"
+version = "0.1.0"
+description = "Matched-pair, order-balanced (A-B-B-A) benchmarking with paired bootstrap confidence intervals."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
+
+[project.scripts]
+silicon-lab = "silicon_lab.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/silicon_lab"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "reports"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests", "reports"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+# Markdown table rows cannot be wrapped.
+"reports/*/build.py" = ["E501"]

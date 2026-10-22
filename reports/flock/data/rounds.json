@@ -1,0 +1,109 @@
+{
+  "scope": "same-VM diagnostic A-B-B-A; not an official ranked score",
+  "base_median_seconds": 0.519061167,
+  "candidate_median_seconds": 0.544754188,
+  "speedup": 0.9528355695725281,
+  "latency_change_percent": 4.9499023686354615,
+  "rounds": [
+    {
+      "arm": "base",
+      "file": "1-base.json",
+      "score": 495799.99000509403,
+      "metrics": {
+        "warmup_trial_seconds": [
+          0.497331626
+        ],
+        "trial_seconds": [
+          0.528729337,
+          0.667746966,
+          0.495821362
+        ],
+        "p10_seconds": 0.502402957,
+        "median_seconds": 0.528729337,
+        "aggregate_compressions_per_second": 464712.57170942205,
+        "p90_p10_latency_ratio": 1.2737652740367926,
+        "batch_size": 262144,
+        "warmup_runs": 1,
+        "measured_runs": 3,
+        "threads": 4,
+        "proof_bytes": 437903,
+        "verified": true
+      }
+    },
+    {
+      "arm": "candidate",
+      "file": "2-candidate.json",
+      "score": 475765.5524258869,
+      "metrics": {
+        "warmup_trial_seconds": [
+          0.483915342
+        ],
+        "trial_seconds": [
+          0.522433124,
+          0.880376565,
+          0.550994074
+        ],
+        "p10_seconds": 0.528145314,
+        "median_seconds": 0.550994074,
+        "aggregate_compressions_per_second": 402513.29989889055,
+        "p90_p10_latency_ratio": 1.5421893278409358,
+        "batch_size": 262144,
+        "warmup_runs": 1,
+        "measured_runs": 3,
+        "threads": 4,
+        "proof_bytes": 438639,
+        "verified": true
+      }
+    },
+    {
+      "arm": "candidate",
+      "file": "3-candidate.json",
+      "score": 486791.1567555731,
+      "metrics": {
+        "warmup_trial_seconds": [
+          0.499200367
+        ],
+        "trial_seconds": [
+          0.878148845,
+          0.506178082,
+          0.538514302
+        ],
+        "p10_seconds": 0.512645326,
+        "median_seconds": 0.538514302,
+        "aggregate_compressions_per_second": 408994.7667748911,
+        "p90_p10_latency_ratio": 1.5804726880509978,
+        "batch_size": 262144,
+        "warmup_runs": 1,
+        "measured_runs": 3,
+        "threads": 4,
+        "proof_bytes": 439727,
+        "verified": true
+      }
+    },
+    {
+      "arm": "base",
+      "file": "4-base.json",
+      "score": 514620.34528126824,
+      "metrics": {
+        "warmup_trial_seconds": [
+          0.496846266
+        ],
+        "trial_seconds": [
+          0.509392997,
+          0.505723266,
+          0.554043652
+        ],
+        "p10_seconds": 0.5064572122,
+        "median_seconds": 0.509392997,
+        "aggregate_compressions_per_second": 501180.27645385015,
+        "p90_p10_latency_ratio": 1.0763268996251052,
+        "batch_size": 262144,
+        "warmup_runs": 1,
+        "measured_runs": 3,
+        "threads": 4,
+        "proof_bytes": 437295,
+        "verified": true
+      }
+    }
+  ]
+}

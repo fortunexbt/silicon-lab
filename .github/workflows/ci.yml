@@ -1,0 +1,25 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - run: pip install -e ".[dev]"
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: pytest
+      - name: Reports rebuild byte-identical from committed data
+        run: |
+          python reports/flock/build.py
+          python reports/qwen38/build.py
+          python reports/shader/build.py
+          git diff --exit-code reports
