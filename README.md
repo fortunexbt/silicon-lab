@@ -1,42 +1,33 @@
 # silicon-lab
 
-A small Python package and CLI for comparing two configurations on one machine without fooling yourself. It extracts the method shared by four earlier benchmarking projects: matched pairs, order balanced as A-B-B-A, warm-up discarded, raw JSON kept, and a bootstrap interval on the paired difference.
+silicon-lab tells you whether configuration B beats configuration A on one machine, and by how much. It runs both arms in A-B-B-A blocks, keeps the raw timings in JSON and reports the mean paired difference with a bootstrap interval.
+
+## Quick start
+
+```
+pip install -e .
+silicon-lab run --blocks 6 --out result.json --hash-rounds 20000 40000
+silicon-lab report result.json
+```
+
+The built-in workload is a SHA-256 chain, so this runs anywhere with Python 3.10 or later. To time your own programs, swap `--hash-rounds` for `--cmd-a "..." --cmd-b "..."`. Each call runs the command once as a subprocess and times it wall-clock.
 
 ## Method
 
-1. **A-B-B-A blocks.** Each block runs A, B, B, A. A linear drift in the machine (thermals, caches, background load) hits both arms equally and cancels in the block difference.
-2. **Warm-up discard.** Each run makes some warm-up calls first. Their values are kept in the raw record but excluded from the statistics.
-3. **Run value.** A run's value is the median of its measured trials.
-4. **Paired difference.** Per block, B mean minus A mean.
-5. **Interval.** A seeded percentile bootstrap of the mean over block differences (10,000 resamples, seed 20261023, 95%). With fewer than two blocks there is no interval and the report says so.
-6. **Environment.** Every record stores chip, OS, Python, CPU count, memory and power source.
-
-## Install and use
-
-```
-pip install -e ".[dev]"
-
-silicon-lab run --blocks 6 --label "hash chain 20k vs 40k" --out result.json \
-    --hash-rounds 20000 40000
-silicon-lab report result.json --out REPORT.md
-```
-
-Time your own commands with `--cmd-a "..." --cmd-b "..."` instead of `--hash-rounds`. Run `silicon-lab run --help` for all options. The test suite uses a deterministic CPU hash loop as its workload and never runs a model.
+In an A, B, B, A block a linear drift such as a thermal ramp adds the same amount to both arms and cancels in the difference. Each run discards `--warmup` calls (default 1, still recorded) and takes the median of `--trials` calls (default 3). The interval is a 95% percentile bootstrap of the mean B minus A over blocks, with 10,000 resamples and seed 20261023, so it needs at least two blocks (`--blocks` defaults to 4). Each record also stores the chip, OS, memory, load, power source and thermal state.
 
 ## Reports
 
-Three earlier measurements, re-expressed with their raw data, pinned recipes, and the time and place they ran. Each `build.py` regenerates its `REPORT.md` from the committed data, and CI checks the output is unchanged. This repository did not rerun any of these measurements.
+Three earlier measurements, rebuilt from their committed raw data. CI reruns each `build.py` and fails if its `REPORT.md` changes. None was remeasured here.
 
-| Report | Headline | Interval | Main limit |
-|---|---|---|---|
-| [flock](reports/flock/REPORT.md) | Candidate 4.95% slower than base (0.5448 s vs 0.5191 s), A-B-B-A on one CI VM, 2026-09 | none, one block | mixed-hardware runner pool; a diagnostic, not a score |
-| [qwen38](reports/qwen38/REPORT.md) | 42.13 tok/s median decode, five prompts, 24 GB M4, 2026-10-19 | none, not a paired design | prompts range 24.18 to 46.21 tok/s; sweep rows are single measurements |
-| [shader](reports/shader/REPORT.md) | repeat noise of one shader profile on a base M4, plus six matched pairs | n=3 bootstrap on the repeats | one machine, a CPU frame metric, one capture per pair arm |
+- [flock](reports/flock/REPORT.md) found a BLAKE3 candidate 4.95% slower than base in one A-B-B-A block on a GitHub Actions VM. One block gives no interval.
+- [qwen38](reports/qwen38/REPORT.md) measured a median 42.13 tok/s decode for a local 35B model on a 24 GB M4. It isn't a paired design.
+- [shader](reports/shader/REPORT.md) sets a 1.3 FPS noise band from three repeat captures of one Minecraft shader profile, then reads six matched pairs against it.
 
-## Sources and licences
+Run the checks with `pip install -e ".[dev]"` then `ruff check . && ruff format --check . && pytest`.
 
-- `minecraft-apple-silicon-framework` (shader captures and ledger): MIT.
-- Flock baseline runner (CI log of one run): the project's own repository.
-- Local MLX/llama.cpp optimisation notes (qwen38): only throughput numbers are published. The model's licence was not verified, so no weights or outputs are included.
+## Sources and licence
 
-This repository is MIT licensed.
+The shader data comes from [minecraft-apple-silicon-framework](https://github.com/fortunexbt/minecraft-apple-silicon-framework) (MIT) and the flock data from one run of [flock-baseline-runner](https://github.com/fortunexbt/flock-baseline-runner). The qwen38 figures come from a local llama.cpp tuning project. Only throughput numbers are published, because the model's licence wasn't verified.
+
+silicon-lab is MIT licensed.
